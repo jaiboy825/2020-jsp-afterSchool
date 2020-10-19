@@ -32,6 +32,11 @@ if(id != null && id.equals("admin")){
 	<form action="/index.html">
 		<input type="submit" value="메인으로">
 	</form>
+	<br>
+	<br>
+	<jsp:include page="/layout/footer.jsp" flush="false">
+	<jsp:param value="회원관리" name="type"/>
+	</jsp:include>
 </body>
 </html>
 <%
