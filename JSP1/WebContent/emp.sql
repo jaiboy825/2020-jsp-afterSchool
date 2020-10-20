@@ -1,3 +1,5 @@
+drop table emp;
+
 create table emp (
 	num number(7) primary key,
 	name varchar2(20) not null,
@@ -6,3 +8,5 @@ create table emp (
 create sequence seq_num increment by 1 start with 1 nocycle nocache;
 insert into emp(num, name, age, score) values(seq_num.nextval, 'jj',18, 100);
 select * from emp;
+
+insert into (num, name, age, score) values(seq_num.nextval, 'd',1,1);
