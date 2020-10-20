@@ -1,0 +1,24 @@
+- init() : 초기화
+- service() : 서비스 제공
+- destroy() : 서블릿 종료전 마무리 작업
+
+client -(요청)> 웹서버 -> 서블릿 분석(web.xml) 
+-> 찾은 서블릿 -> service -> doPost() -> doGet()
+
+JSP application 
+모델 1 : [비즈니스 logic] + 출력
+	        기능구현
+	jsp
+모델 2 : (출력) 	서블릿( 비즈니스 logic )  
+
+Mvc (Model-View-Controller)
+Model : 기능 (DB 연동)(java 파일로 구성)
+View : JSP
+Controller : 서블릿 
+
+사용자 -(요청)> Controller ↔ Model 
+↑		↓
+응답	←       View
+
+DTO = VO (Value Object) : db 레코드 
+VO : 변수선언 (private) → public,getter,setter 메서드, 생성자 
