@@ -1,69 +1,147 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import common.jdbcUtil;
 import vo.EmpVO;
 
 public class EmpDAO {
 	// CRUD
 	public int insertEmp(EmpVO vo) {
 		int n = 0;
-		//DB 연동 코드 추가
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");			
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("오라클 연동 실패");
-		}
-		Connection conn = null;
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String dbUser = "hr";
-		String dbPassword = "hr";
-		try {
-			conn = DriverManager.getConnection(url,dbUser, dbPassword);
-			
-		} catch (SQLException e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			System.out.println("db 연결 실패. 연결 스트림, 이름 등을 확인할 것");
-		}
-		if(conn == null) {
+		Connection conn = jdbcUtil.getConnection();
+		if (conn == null) {
 			return -1;
 		}
-		
-		//insert into 실행
+
+		// insert into 실행
 		PreparedStatement pstmt = null;
 		String sql = "insert into emp(num, name, age, score) values(seq_num.nextval, ?,?,?)";
 		try {
-			pstmt = conn.prepareStatement(sql);		
-			pstmt.setString(1,vo.getName());
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getName());
 			pstmt.setInt(2, vo.getAge());
 			pstmt.setInt(3, vo.getScore());
-			
+
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-		}finally {
-			if(conn != null) {
-				try {
-					conn.close();					
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			}
-			if(pstmt != null) {
-				try {
-					pstmt.close();
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			}
+		} finally {
+			jdbcUtil.close(conn, pstmt, null);
 		}
 		return n;
+
+	}
+
+	public List<EmpVO> listEmp() {
+		List<EmpVO> list = new ArrayList<EmpVO>();
+
+		// db select
+		Connection conn = jdbcUtil.getConnection();
+		if (conn == null) {
+			return null; // 연결 실
+		}
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select * from emp order by num ";
+		EmpVO vo = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new EmpVO();
+				vo.setNum(rs.getInt("num"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setScore(rs.getInt("score"));
+				
+				list.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			jdbcUtil.close(conn, pstmt, rs);
+		}
+
+		return list;
+	}
+
+	public EmpVO getEmp(int num) {
+		Connection conn = jdbcUtil.getConnection();
+		EmpVO vo = null;
+		if(conn == null) return null;
 		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select * from emp where num = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				vo = new EmpVO();
+				vo.setNum(rs.getInt("num"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setScore(rs.getInt("score"));
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally {
+			jdbcUtil.close(conn, pstmt, rs);
+		}
+		return vo;
+		
+	}
+
+	public int updateEmp(EmpVO vo) {
+		int n = 0;
+		Connection conn = jdbcUtil.getConnection();
+		if(conn == null)
+			return -1;
+		PreparedStatement pstmt = null;
+		String sql = "Update emp set age = ?, score = ? where num = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, vo.getAge());
+			pstmt.setInt(2, vo.getScore());
+			pstmt.setInt(3, vo.getNum());
+			n = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			jdbcUtil.close(conn, pstmt, null);
+		}
+		
+		return n;
+		
+	}
+
+	public int deleteEmp(int num) {
+		int n = 0;
+		Connection conn = jdbcUtil.getConnection();
+		if(conn == null)
+			return -1;
+		PreparedStatement pstmt = null;
+		String sql = "delete from emp where num = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			n = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO: handle exception
+		}finally {
+			jdbcUtil.close(conn, pstmt, null);
+		}
+		return n;
 	}
 }

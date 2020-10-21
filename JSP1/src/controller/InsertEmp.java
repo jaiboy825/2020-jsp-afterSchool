@@ -52,7 +52,7 @@ public class InsertEmp extends HttpServlet {
 		if (n > 0) {
 			response.sendRedirect("/listEmp");
 		} else {
-			response.sendRedirect("/insert.html");
+			response.sendRedirect("/index.jsp");
 		}
 
 	}
