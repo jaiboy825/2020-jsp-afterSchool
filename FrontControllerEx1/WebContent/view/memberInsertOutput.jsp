@@ -1,0 +1,13 @@
+<%@page import="vo.MemberVO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="../menu.jsp"%>
+
+<div class="notice_box">
+	<%
+		String id = (String)request.getAttribute("id");
+	%>
+	<h3><%= id %>님 가입이 완료되었습니다.</h3>
+</div>
+
+<%@ include file="../footer.jsp"%>
