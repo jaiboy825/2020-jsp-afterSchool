@@ -1,50 +1,71 @@
 package common;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class JdbcUtil {
+
 	public static Connection getConnection() {
 		Connection conn = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "hr", "hr");
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			// TODO: handle exception
 		}
+		
+		System.out.println("JdbcUtil Connection = " + conn);
 		return conn;
 	}
+
 	public static void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-		if(rs != null) {
+		if (rs != null) {
 			try {
 				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("rs");
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+
 		}
-		close(conn, pstmt);
-	}
-	
-	public static void close(Connection conn, PreparedStatement pstmt) {
-		if(pstmt != null) {
+		if (pstmt != null) {
 			try {
 				pstmt.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("pstmt");
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+
 		}
-		if(conn != null) {
+		if (conn != null) {
 			try {
 				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.out.println("conn");
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+
 		}
 	}
+
+	public static void close(Connection conn, PreparedStatement pstmt) {
+		if (pstmt != null) {
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}
+
+	}
+
 }

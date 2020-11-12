@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,13 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class frontController
+ * Servlet implementation class FrontController
  */
-@WebServlet(name = "front", urlPatterns = { "*.do" })
+@WebServlet(name = "front", urlPatterns = {"*.do"})
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     String charset = null;
-     HashMap<String, Controller> list = null;
+	String charset;
+	HashMap<String, Controller> list = null;
+	
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -30,25 +33,29 @@ public class FrontController extends HttpServlet {
 	 * @see Servlet#init(ServletConfig)
 	 */
 	public void init(ServletConfig config) throws ServletException {
-		// url과 sub controller 맵핑
+		// TODO Auto-generated method stub
 		charset = config.getInitParameter("charset");
 		
 		list = new HashMap<String, Controller>();
-		list.put("/artInsert.do", new ArtInsertController());
+		list.put("/list.do",new ListController());
+		list.put("/insert.do",new InsertController());
+		
+	
 	}
 
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		request.setCharacterEncoding(charset);
+		String url = request.getRequestURI();
+		String contextPath = request.getContextPath();
+		String path = url.substring(contextPath.length());
 		
-		String url = request.getRequestURI(); // ex) /dev/memberSearch.do
-		String contextPath = request.getContextPath(); // ex) /dev
-		String path = url.substring(contextPath.length()); // ex)
-		
-		Controller subController = list.get(path);
+		Controller subController =  list.get(path);
 		subController.execute(request, response);
+		
 	}
 
 }

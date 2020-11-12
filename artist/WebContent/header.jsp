@@ -4,22 +4,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>오디션 관리</title>
-<link rel="stylesheet" href="style.css">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 	<!-- header -->
 	<header>
-	<p class="title">오디션 관리 프로그램</p>
+		<h1> 오디션 관리 프로그램 </h1>
 	</header>
 	
 	<!-- menu -->
 	<nav>
 		<ul>
-			<li><a href="/view/insertArt.jsp">회원등록</a></li>
-			<li><a href="/artList.do">참가자목록조회</a></li>
-			<li><a href="/mentoList.do">멘토점수조회</a></li>
-			<li><a href="/rankList.do">참가자등수조회</a></li>
-			<li><a href="/index.jsp">홈으로</a></li>
+			<li><a href="/view/artistInsert.jsp">오디션등록</a></li>
+			<li><a href="/view/artistList.jsp">참가자목록 조회/수정</a></li>
+			<li><a href="/view/mentoList.jsp">멘토점수조회</a></li>
+			<li><a href="/view/rankList.jsp">참가자등수 조회</a></li>
 		</ul>
 	</nav>
